@@ -200,12 +200,12 @@ export class MyfilesComponent implements OnInit {
             this.afs.collection('files').doc(FILE_DATA[i].fileid).delete().then(function() {
               console.log("File found and delete in database");
             }).catch(function(error) {
-              console.error("Error removing document: ", error);
+              console.error("Erro ao remover documento: ", error);
             });
             firebase.storage().ref(FILE_DATA[i].user + '/' + FILE_DATA[i].name).delete().then(function() {
               console.log("File found and deleted in Storage");
             }).catch(function(error) {
-              console.error("Error removing document: ", error);
+              console.error("Erro ao remover documento: ", error);
             });
           }
         }

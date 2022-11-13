@@ -108,50 +108,50 @@ export class HomeComponent implements OnInit {
           this.firstNameDisplay = doc.data().firstName;
           this.lastNameDisplay = doc.data().lastName;
           if (doc.data().isDoctor == true) {
-            this.isDoctorDisplay = "Doctor";
+            this.isDoctorDisplay = "Doutor";
             this.surname = "Dr. "
             this.isDoctor = true;
           } else {
-            this.isDoctorDisplay = "Patient";
+            this.isDoctorDisplay = "Paciente";
             this.isDoctor = false;
           }
       } else {
-          console.log("No such document!");
+          console.log("Não há documento!");
       }
   }).catch(function(error) {
-      console.log("Error getting document:", error);
+      console.log("Erro ao obter documento:", error);
   });
   }
 
-  // This method will fetch all appointments
+  // Este método irá buscar todos os compromissos
   fetchappointments () {
-    // Clear the table when refreshing or going back to the page.
+    // Limpa a tabela ao atualizar ou voltar para a página.
     ELEMENT_DATA = [];
     this.appointmentdoc = [];
     this.dataSource = new MatTableDataSource(ELEMENT_DATA);
 
-    // Loop to find and update the home page with all appointments relevant to the user.
+    // Loço para localizar e atualizar a página inicial com todos os compromissos relevantes para o usuário.
     const currentdate = this.datePipe.transform(new Date(), "M/dd/yyyy");
     this.afs.collection('appointments').get().toPromise()
     .then(querySnapshot => {
       querySnapshot.docs.forEach(doc => {
         // Import the current date and compare it to the current date.
         var date = this.datePipe.transform(doc.data().Date, "M/dd/yyyy");
-        // If the appointment is outdated, then delete it.
+        // Se o compromisso estiver desatualizado, exclua-o.
         if (date < currentdate) {
           this.afs.collection('appointments').doc(doc.data().appointment_id).delete().then(function() {
             console.log("Found and deleted outdated documents.");
           }).catch(function(error) {
-            console.error("Error removing document: ", error);
+            console.error("Erro ao remover documento: ", error);
           });
-          // If the document is not outdated, add it to the list for the user to see.
+          // Se o documento não estiver desatualizado, adicione-o à lista para o usuário ver.
         } else {
-          // If you are the sender
-          var apptstatus = "Cancelled"
+          // Se você é o remetente
+          var apptstatus = "Cancelado"
           if (doc.data().senderuid == this.displayuid) {
             if (doc.data().isActive == true)
             {
-              apptstatus = "Active"
+              apptstatus = "Ativo"
             }
             if (this.isDoctor == false)
             {
@@ -159,15 +159,13 @@ export class HomeComponent implements OnInit {
             } else {
               var test = {whom: "" + doc.data().receiver, date: date, time: doc.data().Time, status: apptstatus, appointment_id: doc.data().appointment_id, timestamp: doc.data().timestamp};
             }
-            //ELEMENT_DATA.push(test);
             this.appointmentdoc.push(test);
-            //this.dataSource = new MatTableDataSource(ELEMENT_DATA);
             }
-          // If you are the receiver
+          // Se você é o que recebe
           if (doc.data().receiveruid == this.displayuid) {
             if (doc.data().isActive == true)
             {
-              apptstatus = "Active"
+              apptstatus = "Ativo"
             }
             if (this.isDoctor == true)
             {
@@ -175,14 +173,10 @@ export class HomeComponent implements OnInit {
             } else {
               var test = {whom: "Dr. " + doc.data().sender, date: date, time: doc.data().Time, status: apptstatus, appointment_id: doc.data().appointment_id, timestamp: doc.data().timestamp};
             }
-              //ELEMENT_DATA.push(test);
               this.appointmentdoc.push(test);
-              //this.dataSource = new MatTableDataSource(ELEMENT_DATA);
             } 
             }
           });
-          console.log(this.appointmentdoc)
-          //this.appointmentdoc = this.appointmentdoc.sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0)
           this.appointmentdoc = this.appointmentdoc.sort((a, b) => a.timestamp < b.timestamp ? -1 : a.timestamp > b.timestamp ? 1 : 0)
           for (var i = 0; i < this.appointmentdoc.length; i++)
           {
@@ -200,11 +194,11 @@ export class HomeComponent implements OnInit {
     if (!(this.firstNameDisplay == null || this.lastNameDisplay == null || this.firstNameDisplay == "" || this.lastNameDisplay == "")) {
       this.fileNameDialogRef = this.dialog.open(ScheduleappointmentsComponent);
     } else {
-      this.snackbar.open("Please add a first and/or last name in My Account before scheduling an appointment!", 'Dismiss', {duration: 3000});
+      this.snackbar.open("Por favor, adicione um nome e/ou sobrenome em 'Meu Perfil' antes de agendar uma consulta!", 'Fechar', {duration: 3000});
     }
   }
 
-  // This will be the button that goes to the current open appointment.,
+  // Este será o botão que vai para o compromisso aberto atual.,
   goToVideoAppointment() { 
     this.route.navigate(['/videocall']);
   }
@@ -213,14 +207,14 @@ export class HomeComponent implements OnInit {
     this.route.navigate(['/chatbox']);
   }
 
-  // This method cancels the currently selected appointment.
+  // Este método cancela o compromisso atual selecionado.
   async cancelAppointment(whom, date, time, status) { 
     for (var i = 0; i < ELEMENT_DATA.length; i++) {
       if (ELEMENT_DATA[i].whom == whom && ELEMENT_DATA[i].date == date && ELEMENT_DATA[i].time == time && ELEMENT_DATA[i].status == status) {
         this.afs.collection('appointments').doc(ELEMENT_DATA[i].appointment_id).update({
           isActive: false,
         }).catch(function(error) {
-          console.error("Error removing document: ", error);
+          console.error("Erro ao remover documento: ", error);
         });
       }
   }
@@ -230,7 +224,7 @@ export class HomeComponent implements OnInit {
   contentMargin = 240;
 
   onToolbarMenuToggle() {
-    console.log('On toolbar toggled', this.isMenuOpen);
+    console.log('Na toolbar toggled', this.isMenuOpen);
     this.isMenuOpen = !this.isMenuOpen;
 
     if (!this.isMenuOpen) {
@@ -240,5 +234,3 @@ export class HomeComponent implements OnInit {
     }
   }
 }
-
-//<div *ngIf="authService.userData as user"> <h1>Hello: {{(user.displayName) ? user.displayName : 'User'}}
