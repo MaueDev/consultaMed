@@ -1,0 +1,15 @@
+<!-- SignUp Component is not being Used -->
+<div class="s_body">
+    <div class="signupbox">
+        <h1>Sign Up</h1>
+        <form>
+            <p>Username</p>
+            <input type="text" name="" placeholder="Enter Email" #userEmail required>
+            <p>Password</p>
+            <input type="password" name="" placeholder="Enter Password" #userPwd required>
+            <input type="submit" name="" value="Sign Up" (click)="authService.SignUp(userEmail.value, userPwd.value)">
+            <div>
+            </div>
+        </form>
+    </div>
+</div>
