@@ -43,8 +43,8 @@ a {
 
 button {
   border-radius: 20px;
-  border: 1px solid #3e6e8c;
-  background-color: #3e6e8c;
+  border: 1px solid #39a340;
+  background-color: #48B450;
   color: #ffffff;
   font-size: 12px;
   font-size: 12px;
@@ -159,8 +159,8 @@ input {
 
 .overlay {
   background: #ff416c;
-  background: -webkit-linear-gradient(to right, #3e6e8c, #284659);
-  background: linear-gradient(to right, #3e6e8c, #284659);
+  background: -webkit-linear-gradient(to right, #3dafa6, #1a7a72);
+  background: linear-gradient(to right, #47b1a8, #0e5c55);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
@@ -248,8 +248,8 @@ footer a {
 
 .buttonC {
   border-radius: 20px;
-  border: 1px solid #3e6e8c;
-  background-color: #3e6e8c;
+  border: 1px solid #0e5c55;
+  background-color: #0e5c55;
   color: #ffffff;
   font-size: 12px;
   font-size: 12px;
@@ -271,4 +271,23 @@ footer a {
 .buttonC.ghost {
   background-color: transparent;
   border-color: #ffffff;
+}
+
+.logoContent{
+  z-index: 10004;
+  top: -34px;
+  left: 37.5%;
+  position: absolute;
+  width: 25%;
+  background-color: white;
+  border-radius: 20px;
+  padding: 20px;
+  padding-bottom: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding-bottom: 0px;
+}
+
+.headerText
+{
+  margin-top: 100px;
 }
