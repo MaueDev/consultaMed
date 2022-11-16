@@ -18,7 +18,7 @@ font-weight: 500;
 }
 
 .mat-list-item.active { 
-color: #2A8Bf2; 
+color: #1a7a72; 
 font-family: Roboto, "Helvetica Neue", sans-serif;
 
 }
@@ -38,7 +38,7 @@ font-size: 18px;
 }
 
 .mat-toolbar.mat-primary {
-background: #3E6E8C;
+background: #1a7a72;
 }
 
 #toolbarMenu {
@@ -117,4 +117,19 @@ th.mat-header-cell {
 
 .mat-icon {
   vertical-align: middle;
+}
+
+.logoContent{
+  z-index: 10004;
+  top: -34px;
+  left: 42.5%;
+  position: absolute;
+  width: 15%;
+  background-color: white;
+  border-radius: 20px;
+  padding: 20px;
+    padding-bottom: 20px;
+  padding-bottom: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding-bottom: 0px;
 }

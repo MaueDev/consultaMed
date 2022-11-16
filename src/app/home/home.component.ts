@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ScheduleappointmentsComponent } from '../scheduleappointments/scheduleappointments.component';
-import {MatTableDataSource} from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { timer } from 'rxjs';
@@ -40,24 +40,24 @@ export class HomeComponent implements OnInit {
   firstNameDisplay: string;
   lastNameDisplay: string;
   displayemail: string;
-  isDoctorDisplay:string;
+  isDoctorDisplay: string;
   isDoctor: boolean;
   displayedColumns: string[] = ['whom', 'date', 'time', 'status', 'cancel', 'text', 'video'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
   firstandlastname = this.lastNameDisplay + " " + this.firstNameDisplay;
   surname: string;
-  doctors:string[] = [];
-  patients:string[] = [];
+  doctors: string[] = [];
+  patients: string[] = [];
   appointment_id: string;
   currentdate = this.datePipe.transform(new Date(), "M/dd/yyyy");
-  appointmentdoc:userdoc[] = [];
+  appointmentdoc: userdoc[] = [];
 
   fileNameDialogRef: MatDialogRef<ScheduleappointmentsComponent>;
 
   constructor(
     public authService: AuthService,
     public afAuth: AngularFireAuth,
-    public afs: AngularFirestore,   // Inject Firestore service
+    public afs: AngularFirestore,
     private dialog: MatDialog,
     private datePipe: DatePipe,
     private snackbar: MatSnackBar,
@@ -78,53 +78,36 @@ export class HomeComponent implements OnInit {
     } catch (error) {
       this.displayemail = localStorage.getItem("displayemail");
     }
-    // Fetch user's data
+
     this.fetchuserdata()
 
-    // Fetch all appointments for the user when opening or refreshing the page.
     this.fetchappointments()
-
-    this.testFunction()
-
   }
 
-  testFunction() {
-    var date = new Date();
-    var date2 = new Date("12/20/2019 08:00")
-    console.log(date.toUTCString());
-    console.log(date2.toUTCString());
-    if (date > date2) {
-      console.log("date is greater")
-    } else {
-      console.log("date2 is greater")
-    }
-  }
-
-    fetchuserdata() {
-    // Retrieve user data
+  fetchuserdata() {
     var docRef = this.afs.collection('users').doc(this.displayuid);
     docRef.get().toPromise().then((doc) => {
       if (doc.exists) {
-          this.firstNameDisplay = doc.data().firstName;
-          this.lastNameDisplay = doc.data().lastName;
-          if (doc.data().isDoctor == true) {
-            this.isDoctorDisplay = "Doutor";
-            this.surname = "Dr. "
-            this.isDoctor = true;
-          } else {
-            this.isDoctorDisplay = "Paciente";
-            this.isDoctor = false;
-          }
+        this.firstNameDisplay = doc.data().firstName;
+        this.lastNameDisplay = doc.data().lastName;
+        if (doc.data().isDoctor == true) {
+          this.isDoctorDisplay = "Médico(a)";
+          this.surname = "Dr(a). "
+          this.isDoctor = true;
+        } else {
+          this.isDoctorDisplay = "Paciente";
+          this.isDoctor = false;
+        }
       } else {
-          console.log("Não há documento!");
+        console.log("Não há documento!");
       }
-  }).catch(function(error) {
+    }).catch(function (error) {
       console.log("Erro ao obter documento:", error);
-  });
+    });
   }
 
   // Este método irá buscar todos os compromissos
-  fetchappointments () {
+  fetchappointments() {
     // Limpa a tabela ao atualizar ou voltar para a página.
     ELEMENT_DATA = [];
     this.appointmentdoc = [];
@@ -133,73 +116,68 @@ export class HomeComponent implements OnInit {
     // Loço para localizar e atualizar a página inicial com todos os compromissos relevantes para o usuário.
     const currentdate = this.datePipe.transform(new Date(), "M/dd/yyyy");
     this.afs.collection('appointments').get().toPromise()
-    .then(querySnapshot => {
-      querySnapshot.docs.forEach(doc => {
-        // Import the current date and compare it to the current date.
-        var date = this.datePipe.transform(doc.data().Date, "M/dd/yyyy");
-        // Se o compromisso estiver desatualizado, exclua-o.
-        if (date < currentdate) {
-          this.afs.collection('appointments').doc(doc.data().appointment_id).delete().then(function() {
-            console.log("Found and deleted outdated documents.");
-          }).catch(function(error) {
-            console.error("Erro ao remover documento: ", error);
-          });
-          // Se o documento não estiver desatualizado, adicione-o à lista para o usuário ver.
-        } else {
-          // Se você é o remetente
-          var apptstatus = "Cancelado"
-          if (doc.data().senderuid == this.displayuid) {
-            if (doc.data().isActive == true)
-            {
-              apptstatus = "Ativo"
-            }
-            if (this.isDoctor == false)
-            {
-              var test = {whom: "Dr. " + doc.data().receiver, date: date, time: doc.data().Time, status: apptstatus, appointment_id: doc.data().appointment_id, timestamp: doc.data().timestamp};
-            } else {
-              var test = {whom: "" + doc.data().receiver, date: date, time: doc.data().Time, status: apptstatus, appointment_id: doc.data().appointment_id, timestamp: doc.data().timestamp};
-            }
-            this.appointmentdoc.push(test);
-            }
-          // Se você é o que recebe
-          if (doc.data().receiveruid == this.displayuid) {
-            if (doc.data().isActive == true)
-            {
-              apptstatus = "Ativo"
-            }
-            if (this.isDoctor == true)
-            {
-              var test = {whom: "" + doc.data().sender, date: date, time: doc.data().Time, status: apptstatus, appointment_id: doc.data().appointment_id, timestamp: doc.data().timestamp};
-            } else {
-              var test = {whom: "Dr. " + doc.data().sender, date: date, time: doc.data().Time, status: apptstatus, appointment_id: doc.data().appointment_id, timestamp: doc.data().timestamp};
-            }
+      .then(querySnapshot => {
+        querySnapshot.docs.forEach(doc => {
+          // Import the current date and compare it to the current date.
+          var date = this.datePipe.transform(doc.data().Date, "M/dd/yyyy");
+          // Se o compromisso estiver desatualizado, exclua-o.
+          if (date < currentdate) {
+            this.afs.collection('appointments').doc(doc.data().appointment_id).delete().then(function () {
+              console.log("Documentos desatualizados encontrados e excluídos.");
+            }).catch(function (error) {
+              console.error("Erro ao remover documento: ", error);
+            });
+            // Se o documento não estiver desatualizado, adicione-o à lista para o usuário ver.
+          } else {
+            // Se você é o remetente
+            var apptstatus = "Cancelado"
+            if (doc.data().senderuid == this.displayuid) {
+              if (doc.data().isActive == true) {
+                apptstatus = "Ativo"
+              }
+              if (this.isDoctor == false) {
+                var test = { whom: "Dr(a). " + doc.data().receiver, date: date, time: doc.data().Time, status: apptstatus, appointment_id: doc.data().appointment_id, timestamp: doc.data().timestamp };
+              } else {
+                var test = { whom: "" + doc.data().receiver, date: date, time: doc.data().Time, status: apptstatus, appointment_id: doc.data().appointment_id, timestamp: doc.data().timestamp };
+              }
               this.appointmentdoc.push(test);
-            } 
             }
-          });
-          this.appointmentdoc = this.appointmentdoc.sort((a, b) => a.timestamp < b.timestamp ? -1 : a.timestamp > b.timestamp ? 1 : 0)
-          for (var i = 0; i < this.appointmentdoc.length; i++)
-          {
-            ELEMENT_DATA.push(this.appointmentdoc[i])
-            this.dataSource = new MatTableDataSource(ELEMENT_DATA);
+            // Se você é o que recebe
+            if (doc.data().receiveruid == this.displayuid) {
+              if (doc.data().isActive == true) {
+                apptstatus = "Ativo"
+              }
+              if (this.isDoctor == true) {
+                var test = { whom: "" + doc.data().sender, date: date, time: doc.data().Time, status: apptstatus, appointment_id: doc.data().appointment_id, timestamp: doc.data().timestamp };
+              } else {
+                var test = { whom: "Dr(a). " + doc.data().sender, date: date, time: doc.data().Time, status: apptstatus, appointment_id: doc.data().appointment_id, timestamp: doc.data().timestamp };
+              }
+              this.appointmentdoc.push(test);
+            }
           }
         });
-    }
+        this.appointmentdoc = this.appointmentdoc.sort((a, b) => a.timestamp < b.timestamp ? -1 : a.timestamp > b.timestamp ? 1 : 0)
+        for (var i = 0; i < this.appointmentdoc.length; i++) {
+          ELEMENT_DATA.push(this.appointmentdoc[i])
+          this.dataSource = new MatTableDataSource(ELEMENT_DATA);
+        }
+      });
+  }
 
-    refresh() {
+  refresh() {
     this.fetchappointments();
-    }
+  }
 
   openAddFileDialog() {
     if (!(this.firstNameDisplay == null || this.lastNameDisplay == null || this.firstNameDisplay == "" || this.lastNameDisplay == "")) {
       this.fileNameDialogRef = this.dialog.open(ScheduleappointmentsComponent);
     } else {
-      this.snackbar.open("Por favor, adicione um nome e/ou sobrenome em 'Meu Perfil' antes de agendar uma consulta!", 'Fechar', {duration: 3000});
+      this.snackbar.open("Por favor, adicione um nome e/ou sobrenome em 'Meu Perfil' antes de agendar uma consulta!", 'Fechar', { duration: 3000 });
     }
   }
 
   // Este será o botão que vai para o compromisso aberto atual.,
-  goToVideoAppointment() { 
+  goToVideoAppointment() {
     this.route.navigate(['/videocall']);
   }
 
@@ -208,17 +186,17 @@ export class HomeComponent implements OnInit {
   }
 
   // Este método cancela o compromisso atual selecionado.
-  async cancelAppointment(whom, date, time, status) { 
+  async cancelAppointment(whom, date, time, status) {
     for (var i = 0; i < ELEMENT_DATA.length; i++) {
       if (ELEMENT_DATA[i].whom == whom && ELEMENT_DATA[i].date == date && ELEMENT_DATA[i].time == time && ELEMENT_DATA[i].status == status) {
         this.afs.collection('appointments').doc(ELEMENT_DATA[i].appointment_id).update({
           isActive: false,
-        }).catch(function(error) {
+        }).catch(function (error) {
           console.error("Erro ao remover documento: ", error);
         });
       }
+    }
   }
-}
 
   isMenuOpen = true;
   contentMargin = 240;
