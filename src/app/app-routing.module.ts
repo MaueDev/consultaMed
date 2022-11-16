@@ -5,7 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { MyaccountComponent } from './myaccount/myaccount.component';
 import { MyfilesComponent } from './myfiles/myfiles.component';
-import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { ResetpasswordComponent } from './recuperarsenha/resetpassword.component';
 import { ChatboxComponent } from './chatbox/chatbox.component';
 import { VideocallComponent } from './videocall/videocall.component';
 
@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'myaccount', component: MyaccountComponent },
   { path: 'myfiles', component: MyfilesComponent },
-  { path: 'resetpassword', component: ResetpasswordComponent },
+  { path: 'recuperarsenha', component: ResetpasswordComponent },
   { path: 'chatbox', component: ChatboxComponent },
   { path: 'videocall', component: VideocallComponent },
 

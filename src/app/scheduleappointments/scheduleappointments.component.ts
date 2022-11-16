@@ -41,7 +41,7 @@ export class ScheduleappointmentsComponent implements OnInit {
   surname: string;
 
   time: time[] = [
-    {value: '8 AM'}, {value: '9 AM'}, {value: '10 AM'}, {value: '11 AM'}, {value: '12 PM'}, {value: '1 PM'}, {value: '2 PM'}, {value: '3 PM'}, {value: '4 PM'}, {value: '5 PM'}, {value: '6 PM'},
+    {value: '08:00'}, {value: '09:00'}, {value: '10:00'}, {value: '11:00'}, {value: '12:00'}, {value: '13:00'}, {value: '14:00'}, {value: '15:00'}, {value: '16:00'}, {value: '17:00'}, {value: '18:00'},
   ];
 
   constructor(public afs: AngularFirestore,
@@ -74,37 +74,37 @@ export class ScheduleappointmentsComponent implements OnInit {
   }
 
   findMilitaryValue(value) {
-    if (value == "8 AM") {
+    if (value == "08:00") {
       return "8:00"
     }
-    if (value == "9 AM") {
+    if (value == "09:00") {
       return "9:00"
     }
-    if (value == "10 AM") {
+    if (value == "10:00") {
       return "10:00"
     }
-    if (value == "11 AM") {
+    if (value == "11:00") {
       return "11:00"
     }
-    if (value == "12 PM") {
+    if (value == "12:00") {
       return "12:00"
     }
-    if (value == "1 PM") {
+    if (value == "13:00") {
       return "13:00"
     }
-    if (value == "2 PM") {
+    if (value == "14:00") {
       return "14:00"
     }
-    if (value == "3 PM") {
+    if (value == "15:00") {
       return "15:00"
     }
-    if (value == "4 PM") {
+    if (value == "16:00") {
       return "16:00"
     }
-    if (value == "5 PM") {
+    if (value == "17:00") {
       return "17:00"
     }
-    if (value == "6 PM") {
+    if (value == "18:00") {
       return "18:00"
     }
   }
@@ -116,19 +116,19 @@ export class ScheduleappointmentsComponent implements OnInit {
           this.firstNameDisplay = doc.data().firstName;
           this.lastNameDisplay = doc.data().lastName;
           if (doc.data().isDoctor == true) {
-            this.isDoctorDisplay = "Doctor";
+            this.isDoctorDisplay = "Médico(a)";
             this.isDoctor = true;
             this.surname = "";
           } else {
-            this.isDoctorDisplay = "Patient";
+            this.isDoctorDisplay = "Paciente";
             this.isDoctor = false;
-            this.surname = "Dr. ";
+            this.surname = "Dr(a). ";
           }
       } else {
-          console.log("No such document!");
+          console.log("Não há documento!");
       }
   }).catch(function(error) {
-      console.log("Error getting document:", error);
+      console.log("Erro ao obter o documento:", error);
   });
   }
 
@@ -140,11 +140,11 @@ export class ScheduleappointmentsComponent implements OnInit {
         if (this.isDoctor == true) {
           // and they are not a doctor
           if (doc.data().isDoctor == false) {
-            // and they are not you
+            // e eles não são você
             if (doc.data().uid != this.displayuid) {
-              // Remove all users without names
+              // Remove todos os usuários sem nomes
               if (!(doc.data().firstName == null || doc.data().firstName == null || doc.data().firstName == "" || doc.data().lastName == "")) {
-                // then print their name
+                // então imprime seu nome
                 var test = {doctor: doc.data().firstName + " " + doc.data().lastName, email: doc.data().email, uid: doc.data().uid}
                 this.userdoc.push(test);
               }
@@ -155,11 +155,11 @@ export class ScheduleappointmentsComponent implements OnInit {
         if (this.isDoctor == false) {
           // and they are a doctor
           if (doc.data().isDoctor == true) {
-            // and they are not you
+            // e eles não são você
             if (doc.data().uid != this.displayuid) {
-              // Remove all users without names
+              // Remove todos os usuários sem nomes
               if (!(doc.data().firstName == null || doc.data().firstName == null || doc.data().firstName == "" || doc.data().lastName == "")) {
-                // then print their name
+                // então imprime seu nome
                 var test = {doctor: doc.data().firstName + " " + doc.data().lastName, email: doc.data().email, uid: doc.data().uid}
                 this.userdoc.push(test);
               }
@@ -172,8 +172,11 @@ export class ScheduleappointmentsComponent implements OnInit {
 
 
   // Saves the selected appointment data as a document to firebase.
-  // Note: The variable "Doctor" is just the person selected for the appointment, and can either be a patient or a doctor.
+  // Note: The variable "Médico(a)" is just the person selected for the appointment, and can either be a patient or a doctor.
   saveAppointment(Date2, Time, Doctor) {
+    console.log(Date2)
+    console.log(Time)
+    console.log(Doctor)
     var timestamp = new Date(Date2 + " " + this.findMilitaryValue(Time))
     let id = this.afs.createId()
     for (var i = 0; i < this.userdoc.length; i++) {
@@ -214,7 +217,7 @@ export class ScheduleappointmentsComponent implements OnInit {
       querySnapshot.docs.forEach(doc => {
         if (doc.data().Date == date)
         {
-          // If the current doc has the user's uid in it as the sender or receiver.
+          // Se o documento atual tiver o uid do usuário como remetente ou destinatário.
           if (this.displayuid == doc.data().senderuid)
           {
             this.userdoc = this.userdoc.filter(order => order.doctor !== doc.data().receiver);
@@ -230,7 +233,7 @@ export class ScheduleappointmentsComponent implements OnInit {
 
   filtertimes(doctor, date){
     this.time = [
-      {value: '8 AM'}, {value: '9 AM'}, {value: '10 AM'}, {value: '11 AM'}, {value: '12 PM'}, {value: '1 PM'}, {value: '2 PM'}, {value: '3 PM'}, {value: '4 PM'}, {value: '5 PM'}, {value: '6 PM'},
+      {value: '08:00'}, {value: '09:00'}, {value: '10:00'}, {value: '11:00'}, {value: '12:00'}, {value: '13:00'}, {value: '14:00'}, {value: '15:00'}, {value: '16:00'}, {value: '17:00'}, {value: '18:00'},
     ];
     this.afs.collection('appointments').get().toPromise()
     .then(querySnapshot => {

@@ -17,27 +17,24 @@
             </mat-card>
             <mat-nav-list class="menu-item">
                 <a mat-list-item [routerLink]="'/home'" [routerLinkActive]="['active']">
-                    <mat-icon class="home-icon" aria-hidden="false" aria-label="Example home icon">home</mat-icon>Home
+                    <mat-icon class="home-icon" aria-hidden="false" aria-label="Example home icon">home</mat-icon>Inicio
                 </a>
                 <a mat-list-item [routerLink]="'/myfiles'" [routerLinkActive]="['active']">
                     <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">upload_file
-                    </mat-icon>My Files
+                    </mat-icon>Meus arquivos
                 </a>
                 <a mat-list-item [routerLink]="'/chatbox'" [routerLinkActive]="['active']">
                     <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">chat</mat-icon>Chats
                 </a>
                 <a mat-list-item [routerLink]="'/videocall'" [routerLinkActive]="['active']">
-                    <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">duo</mat-icon>Video
-                    Call
+                    <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">duo</mat-icon>Vídeo Chamada
                 </a>
                 <a mat-list-item [routerLink]="'/myaccount'" [routerLinkActive]="['active']">
                     <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">account_circle
-                    </mat-icon>My
-                    Account
+                    </mat-icon>Meu Perfil
                 </a>
                 <a mat-list-item (click)="authService.SignOut()">
-                    <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">logout</mat-icon>Sign
-                    Out
+                    <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">logout</mat-icon>Sair
                 </a>
             </mat-nav-list>
         </mat-list>
@@ -45,17 +42,17 @@
     <mat-sidenav-content>
         <div style="height: 80vh;">
             <div class="container">
-                <h2 style="padding-right: 55%; margin: 0;">Video Chat</h2>
+                <h2 style="padding-right: 55%; margin: 0;">Vídeo Chamada</h2>
                 <br>
                 <mat-card class="appointment-card">
 
                     <div *ngIf="isDoctor == false">
                         <mat-form-field>
-                            <mat-label>Appointments with:</mat-label>
+                            <mat-label>Compromissos com:</mat-label>
                             <mat-select #Appointment (selectionChange)="createVideoStream(Appointment.value)">
                                 <mat-option [value]="0">{{checkAstring}}</mat-option>
                                 <mat-option *ngFor="let appointmentdoc of appointmentdoc" [value]="appointmentdoc.uid">
-                                    Dr.
+                                    Dr(a).
                                     {{appointmentdoc.doctor}} {{appointmentdoc.email}}</mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -65,7 +62,7 @@
                     <div class="col" *ngIf="isDoctor == true">
                         <br>
                         <mat-form-field>
-                            <mat-label>Video Chat With</mat-label>
+                            <mat-label>Vídeo Chamada Com</mat-label>
                             <mat-select [formControl]="userControl" #allUser
                                 (selectionChange)="createVideoStream(allUser.value)">
                                 <mat-optgroup *ngFor="let group of userGroups" [label]="group._category">

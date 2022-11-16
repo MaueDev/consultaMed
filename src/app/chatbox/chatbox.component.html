@@ -16,17 +16,17 @@
       </mat-card>
       <mat-nav-list class="menu-item">
         <a mat-list-item [routerLink]="'/home'" [routerLinkActive]="['active']">
-            <mat-icon class="home-icon" aria-hidden="false" aria-label="Example home icon">home</mat-icon>Home
+            <mat-icon class="home-icon" aria-hidden="false" aria-label="Example home icon">home</mat-icon>Inicio
         </a>
         <a mat-list-item [routerLink]="'/myfiles'" [routerLinkActive]="['active']">
             <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">upload_file
-            </mat-icon>My Files
+            </mat-icon>Meus arquivos
         </a>
         <a mat-list-item [routerLink]="'/chatbox'" [routerLinkActive]="['active']">
             <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">chat</mat-icon>Chats
         </a>
         <a mat-list-item [routerLink]="'/videocall'" [routerLinkActive]="['active']">
-            <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">duo</mat-icon>Video
+            <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">duo</mat-icon>Vídeo
             Call
         </a>
         <a mat-list-item [routerLink]="'/myaccount'" [routerLinkActive]="['active']">
@@ -44,7 +44,7 @@
   <mat-sidenav-content>
     <div style="height: 80vh;">
       <div class="container">
-        <h2 style="padding-right: 55%;">Messages</h2>
+        <h2 style="padding-right: 55%;">Chat</h2>
         <br>
         <mat-card class="appointment-card">
 
@@ -60,11 +60,11 @@
         <div *ngIf="isDoctor == false">
           <div *ngIf="noappt == false">
             <mat-form-field>
-              <mat-label>Chat With</mat-label>
+              <mat-label>Conversar com:</mat-label>
               <mat-select [formControl]="userControl" #allUser (selectionChange)="showMessages(allUser.value)">
                 <mat-optgroup *ngFor="let group of patientuserGroups" [label]="group._category">
                   <mat-option *ngFor="let allUsers of group._allUsers" [value]="allUsers.uid">
-                    Dr. {{allUsers.doctor}} - {{allUsers.email}}
+                    Dr(a). {{allUsers.doctor}} - {{allUsers.email}}
                   </mat-option>
                 </mat-optgroup>
               </mat-select>
@@ -89,13 +89,11 @@
   
             <br>
   
-            <!-- This is the sending box -->
             <mat-form-field class="messageForm">
-              <mat-label>Type Message Here</mat-label>
-              <input (keyup.enter)="sendMessage(message.value)" matInput placeholder="Type Message Here" [(ngModel)]="value" #message>
+              <mat-label>Chat:</mat-label>
+              <input (keyup.enter)="sendMessage(message.value)" matInput placeholder="Mensagem:" [(ngModel)]="value" #message>
             </mat-form-field>
   
-            <!-- This is the sending button -->
             <button mat-button (click)="sendMessage(message.value)">
               <mat-icon>send</mat-icon>
             </button>
@@ -105,7 +103,7 @@
           <div class="col" *ngIf="isDoctor == true">
             <br>
             <mat-form-field>
-              <mat-label>Chat With</mat-label>
+              <mat-label>Conversar com:</mat-label>
               <mat-select [formControl]="userControl" #allUser (selectionChange)="showMessages(allUser.value)">
                 <mat-optgroup *ngFor="let group of doctoruserGroups" [label]="group._category">
                   <mat-option *ngFor="let allUsers of group._allUsers" [value]="allUsers.uid">
@@ -134,18 +132,15 @@
 
           <br>
 
-          <!-- This is the sending box -->
           <mat-form-field class="messageForm">
-            <mat-label>Type Message Here</mat-label>
-            <input (keyup.enter) = "sendMessage(message.value)" matInput placeholder="Type Message Here" [(ngModel)]="value" #message>
+            <mat-label>Digite sua mensagem</mat-label>
+            <input (keyup.enter) = "sendMessage(message.value)" matInput placeholder="Digite sua mensagem" [(ngModel)]="value" #message>
           </mat-form-field>
 
-          <!-- This is the sending button -->
           <button mat-button (click)="sendMessage(message.value)">
             <mat-icon>send</mat-icon>
           </button>
           </div>
-          <!-- <button type="submit" class="btn btn-danger" (click)="[sendMessage(message.value), refresh()]"><mat-icon>send</mat-icon></button> -->
         </mat-card>
       </div>
     </div>

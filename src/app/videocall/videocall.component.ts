@@ -78,7 +78,7 @@ export class VideocallComponent implements OnInit {
   constructor(
     public authService: AuthService,
     public afAuth: AngularFireAuth,
-    public afs: AngularFirestore,   // Inject Firestore service
+    public afs: AngularFirestore,   // Injeta o serviço Firestore
     private ngxAgoraService: NgxAgoraService,
   ) {
 
@@ -97,13 +97,13 @@ export class VideocallComponent implements OnInit {
     } catch (error) {
       this.displayemail = localStorage.getItem("displayemail");
     }
-    // Fetch user's data
+    // Busca os dados do usuário
     this.fetchuserdata()
 
-    // Update doctordoc
+    // Atualiza doutordoc
     this.updateDoctorsPatients()
 
-    // Update appointments
+    // Atualizar compromissos
     this.updateappointments()
 
     this.checkAppointmentString();
@@ -111,7 +111,7 @@ export class VideocallComponent implements OnInit {
     this.client = this.ngxAgoraService.createClient({ mode: 'rtc', codec: 'h264' });
     this.assignClientHandlers();
 
-    // Added in this step to initialize the local A/V stream
+    // Adicionado nesta etapa para inicializar o fluxoA/V stream
     // this.localStream = this.ngxAgoraService.createStream({ streamID: this.uid, audio: true, video: true, screen: false });
     // this.assignLocalStreamHandlers();
     // this.initLocalStream(() => this.join(uid => this.publish(), error => console.error(error)));
@@ -131,31 +131,31 @@ export class VideocallComponent implements OnInit {
   }
 
   /**
- * Attempts to connect to an online chat room where users can host and receive A/V streams.
+ * Tenta se conectar a uma sala de bate-papo online onde os usuários podem hospedar e receber fluxos A/V.
  */
   join(onSuccess?: (uid: number | string) => void, onFailure?: (error: Error) => void): void {
     this.client.join(null, this.gen_uid, this.uid, onSuccess, onFailure);
   }
 
   /**
-   * Attempts to upload the created local A/V stream to a joined chat room.
+   * Tenta fazer upload do fluxo A/V local criado para uma sala de bate-papo ingressada.
    */
   publish(): void {
-    this.client.publish(this.localStream, err => console.log('Publish local stream error: ' + err));
+    this.client.publish(this.localStream, err => console.log('Publicar erro de stream local: ' + err));
   }
 
   private assignClientHandlers(): void {
     this.client.on(ClientEvent.LocalStreamPublished, evt => {
-      console.log('Publish local stream successfully');
+      console.log('Publicado stream local com sucesso');
     });
 
     this.client.on(ClientEvent.Error, error => {
-      console.log('Got error msg:', error.reason);
+      console.log('Mensagem de erro:', error.reason);
       if (error.reason === 'DYNAMIC_KEY_TIMEOUT') {
         this.client.renewChannelKey(
           '',
-          () => console.log('Renewed the channel key successfully.'),
-          renewError => console.error('Renew channel key failed: ', renewError)
+          () => console.log('A channel key foi renovada com sucesso.'),
+          renewError => console.error('Falha na renovação da channel key : ', renewError)
         );
       }
     });
@@ -163,7 +163,7 @@ export class VideocallComponent implements OnInit {
     this.client.on(ClientEvent.RemoteStreamAdded, evt => {
       const stream = evt.stream as Stream;
       this.client.subscribe(stream, { audio: true, video: true }, err => {
-        console.log('Subscribe stream failed', err);
+        console.log('Falha na transmissão', err);
       });
     });
 
@@ -181,7 +181,7 @@ export class VideocallComponent implements OnInit {
       if (stream) {
         stream.stop();
         this.remoteCalls = [];
-        console.log(`Remote stream is removed ${stream.getId()}`);
+        console.log(`O fluxo remoto foi removido ${stream.getId()}`);
       }
     });
 
@@ -190,7 +190,7 @@ export class VideocallComponent implements OnInit {
       if (stream) {
         stream.stop();
         this.remoteCalls = this.remoteCalls.filter(call => call !== `${this.getRemoteId(stream)}`);
-        console.log(`${evt.uid} left from this channel`);
+        console.log(`${evt.uid} saiu deste canal`);
       }
     });
   }
@@ -202,12 +202,12 @@ export class VideocallComponent implements OnInit {
   // Added in this step
   private assignLocalStreamHandlers(): void {
     this.localStream.on(StreamEvent.MediaAccessAllowed, () => {
-      console.log('accessAllowed');
+      console.log('acesso permitido');
     });
 
     // The user has denied access to the camera and mic.
     this.localStream.on(StreamEvent.MediaAccessDenied, () => {
-      console.log('accessDenied');
+      console.log('acesso negado');
     });
   }
 
@@ -220,7 +220,7 @@ export class VideocallComponent implements OnInit {
           onSuccess();
         }
       },
-      err => console.error('getUserMedia failed', err)
+      err => console.error('getUserMedia falhou', err)
     );
   }
 
@@ -228,9 +228,9 @@ export class VideocallComponent implements OnInit {
     this.client.leave(() => {
       this.localStream.stop();
       document.getElementById('agora_local').innerHTML = "";
-      console.log("Leavel channel successfully");
+      console.log("Sucesso ao sair do canal");
     }, (err) => {
-      console.log("Leave channel failed");
+      console.log("Falha ao sair do canal");
     });
   }
 
@@ -249,7 +249,7 @@ export class VideocallComponent implements OnInit {
   checkAppointmentString() {
     setTimeout(() => {
       if (this.checkAnumD == 0 && this.checkAnumP == 0) {
-        this.checkAstring = "Schedule Appointment to Video Chat";
+        this.checkAstring = "Agendar Consulta para o Vídeo Chamada";
       }
       else if (this.checkAnumD > 0 || this.checkAnumP > 0) {
         this.checkAstring = "";
@@ -265,44 +265,44 @@ export class VideocallComponent implements OnInit {
         this.firstNameDisplay = doc.data().firstName;
         this.lastNameDisplay = doc.data().lastName;
         if (doc.data().isDoctor == true) {
-          this.isDoctorDisplay = "Doctor";
-          this.surname = "Dr. "
+          this.isDoctorDisplay = "Médico(a)";
+          this.surname = "Dr(a). "
           this.isDoctor = true;
         } else {
-          this.isDoctorDisplay = "Patient";
+          this.isDoctorDisplay = "Paciente";
           this.isDoctor = false;
         }
       } else {
-        console.log("No such document!");
+        console.log("Não há documento!");
       }
     }).catch(function (error) {
-      console.log("Error getting document:", error);
+      console.log("Erro ao obter o documento:", error);
     });
   }
 
-  // This method updates the selection list on the chat page with doctors and patients.
+  // Este método atualiza a lista de seleção na página de bate-papo com médicos e pacientes.
   updateDoctorsPatients() {
     this.afs.collection('users').get().toPromise()
       .then(querySnapshot => {
         querySnapshot.docs.forEach(doc => {
-          // If they are a doctor
+          // Se eles são médicos
           if (doc.data().isDoctor == true) {
-            // and they are not you
+            // e eles não são você
             if (doc.data().uid != this.displayuid) {
-              // Remove all users without names
+              // Remove todos os usuários sem nomes
               if (!(doc.data().firstName == null || doc.data().firstName == null || doc.data().firstName == "" || doc.data().lastName == "")) {
-                // then print their name
+                // então imprime seu nome
                 var test = { doctor: doc.data().firstName + " " + doc.data().lastName, email: doc.data().email, uid: doc.data().uid }
                 this.doctordoc.push(test);
               }
             }
           }
           if (doc.data().isDoctor == false) {
-            // and they are not you
+            // e eles não são você
             if (doc.data().uid != this.displayuid) {
-              // Remove all users without names
+              // Remove todos os usuários sem nomes
               if (!(doc.data().firstName == null || doc.data().firstName == null || doc.data().firstName == "" || doc.data().lastName == "")) {
-                // then print their name
+                // então imprime seu nome
                 var test = { doctor: doc.data().firstName + " " + doc.data().lastName, email: doc.data().email, uid: doc.data().uid }
                 this.patientdoc.push(test);
               }
@@ -313,13 +313,13 @@ export class VideocallComponent implements OnInit {
       });
   }
 
-  // This method updates the selection list on the chat page with people who you have appointments.
+// Este método atualiza a lista de seleção na página de bate-papo com as pessoas com quem você tem compromissos.
   updateappointments() {
     this.afs.collection('appointments').get().toPromise()
       .then(querySnapshot => {
         querySnapshot.docs.forEach(doc => {
           this.checkbool = true;
-          // If the current doc has the user's uid in it as the sender or receiver.
+          // Se o documento atual tiver o uid do usuário como remetente ou destinatário.
           if (this.displayuid == doc.data().senderuid) {
             for (var i = 0; i < this.appointmentdoc.length; i++) {
               if (this.appointmentdoc[i].uid == doc.data().receiveruid) {

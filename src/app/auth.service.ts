@@ -41,7 +41,17 @@ export class AuthService {
         });
         // this.SetUserData(result.user);
       }).catch((error) => {
-        let snackBarRef = this.snackBar.open(error.message, 'Dismiss', {duration: 5000});
+        let message = error.message
+        //Convertendo Valores do Firebase
+        if(error.message == 'The email address is badly formatted.')
+        {
+          message = 'O endereço de e-mail está incorreto.'
+        }
+        if(error.message == 'The password is invalid or the user does not have a password.')
+        {
+          message = 'A senha é inválida ou o usuário não possui uma senha.'
+        }
+        let snackBarRef = this.snackBar.open(message, 'Fechar', {duration: 5000});
       })
   }
 
@@ -87,15 +97,15 @@ export class AuthService {
     const hasNumbers = /\d/.test(password)
     if(password.length < 8 || !hasNumbers)
     {
-      let snackBarRef = this.snackBar.open('Password must include at least 8 characters and a number!', 'Dismiss', {duration: 6000});
+      let snackBarRef = this.snackBar.open('A senha deve incluir pelo menos 8 caracteres e um número!', 'Fechar', {duration: 6000});
     }
     else {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
         this.SetUserData(result.user);
-        let snackBarRef = this.snackBar.open('Successfully registered, please login!', '', {duration: 3000});
+        let snackBarRef = this.snackBar.open('Cadastrado com sucesso, por favor faça o login!', '', {duration: 3000});
       }).catch((error) => {
-        let snackBarRef = this.snackBar.open(error.message, 'Dismiss', {duration: 5000});
+        let snackBarRef = this.snackBar.open(error.message, 'Fechar', {duration: 5000});
       })
     }
   }
@@ -104,9 +114,9 @@ export class AuthService {
   ForgotPassword(passwordResetEmail) {
     return this.afAuth.auth.sendPasswordResetEmail(passwordResetEmail)
       .then(() => {
-        let snackBarRef = this.snackBar.open('Password reset email sent, check your inbox.', '', {duration: 3000});
+        let snackBarRef = this.snackBar.open('Email de redefinição de senha enviado, verifique sua caixa de entrada.', '', {duration: 3000});
       }).catch((error) => {
-        let snackBarRef = this.snackBar.open(error.message, 'Dismiss', {duration: 5000});
+        let snackBarRef = this.snackBar.open(error.message, 'Fechar', {duration: 5000});
       })
   }
 

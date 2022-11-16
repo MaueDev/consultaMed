@@ -19,7 +19,7 @@
         <h1 class="headerText">Entrar</h1>
         <input type="email" placeholder="Email" #userName required />
         <input type="password" placeholder="Senha" #userPassword required />
-        <a href="/resetpassword">Esqueceu sua senha?</a>
+        <a href="/recuperarsenha">Esqueceu sua senha?</a>
         <input type="button" class="buttonC" value="Entrar"
           (click)="authService.SignIn(userName.value, userPassword.value)">
       </form>

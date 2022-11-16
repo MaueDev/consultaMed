@@ -77,20 +77,20 @@ export class MyaccountComponent implements OnInit {
         this.insuranceCompanyDisplay = doc.data().insurancecompany;
         this.insuranceIdDisplay = doc.data().insuranceid;
         if (doc.data().isDoctor == true) {
-          this.isDoctorDisplay = "Doctor";
-          this.surname = "Dr. "
+          this.isDoctorDisplay = "Médico(a)";
+          this.surname = "Dr(a). "
           this.isDoctor = true;
         } else {
           this.isDoctor = false;
-          this.isDoctorDisplay = "Patient";
+          this.isDoctorDisplay = "Paciente";
         }
-    } else {
-        console.log("No such document!");
+      } else {
+        console.log("Não há documento!");
     }
-    }).catch(function(error) {
-      console.log("Error getting document:", error);
-    });
-  }
+}).catch(function(error) {
+    console.log("Erro ao obter documento:", error);
+});
+}
 
   isMenuOpen = true;
   contentMargin = 240;
@@ -120,7 +120,7 @@ export class MyaccountComponent implements OnInit {
       insuranceid: insuranceid
     })
       .then(function () {
-        console.log("Data Written")
+        console.log("Dados gravados")
       });
       this.afs.collection('appointments').get().toPromise()
       .then(querySnapshot => {
@@ -132,7 +132,7 @@ export class MyaccountComponent implements OnInit {
               sender: firstName + " " + lastName,
             })
             .then(function () {
-              console.log("Data Written")
+              console.log("Dados gravados")
             });
           }
           if (doc.data().receiveruid == this.displayuid)
@@ -141,7 +141,7 @@ export class MyaccountComponent implements OnInit {
               receiver: firstName + " " + lastName,
             })
             .then(function () {
-              console.log("Data Written")
+              console.log("Dados gravados")
             });
           }
         });

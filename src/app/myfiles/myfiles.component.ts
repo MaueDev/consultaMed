@@ -104,10 +104,10 @@ export class MyfilesComponent implements OnInit {
               document.getElementById("docsf").style.display = "block";
             }
         } else {
-            console.log("No such document!");
+            console.log("Não há documento!");
         }
     }).catch(function(error) {
-        console.log("Error getting document:", error);
+        console.log("Erro ao obter o documento:", error);
     });
 
 
@@ -121,18 +121,18 @@ export class MyfilesComponent implements OnInit {
           this.firstNameDisplay = doc.data().firstName;
           this.lastNameDisplay = doc.data().lastName;
           if (doc.data().isDoctor == true) {
-            this.isDoctorDisplay = "Doctor";
-            this.surname = "Dr. "
+            this.isDoctorDisplay = "Médico(a)";
+            this.surname = "Dr(a). "
             this.isDoctor = true;
           } else {
             this.isDoctor = false;
-            this.isDoctorDisplay = "Patient";
+            this.isDoctorDisplay = "Paciente";
           }
       } else {
-          console.log("No such document!");
+          console.log("Não há documento!");
       }
   }).catch(function(error) {
-      console.log("Error getting document:", error);
+      console.log("Erro ao obter o documento:", error);
   });
   }
 
@@ -145,7 +145,7 @@ export class MyfilesComponent implements OnInit {
     this.afs.collection('users').get().toPromise()
     .then(querySnapshot => {
       querySnapshot.docs.forEach(doc => {
-        if(this.isDoctorDisplay == "Doctor"){
+        if(this.isDoctorDisplay == "Médico(a)"){
           if(doc.exists){
             var test = {_uid: doc.data().uid, _name: doc.data().firstName, _lastName: doc.data().lastName, _email: doc.data().email}
             this.PickToSend.push(test);
@@ -198,12 +198,12 @@ export class MyfilesComponent implements OnInit {
         for (var i = 0; i < FILE_DATA.length; i++) {
           if(FILE_DATA[i].name == name && FILE_DATA[i].download == download && FILE_DATA[i].user == user && FILE_DATA[i].fileid == fileid){
             this.afs.collection('files').doc(FILE_DATA[i].fileid).delete().then(function() {
-              console.log("File found and delete in database");
+              console.log("Arquivo encontrado e excluído no banco de dados");
             }).catch(function(error) {
               console.error("Erro ao remover documento: ", error);
             });
             firebase.storage().ref(FILE_DATA[i].user + '/' + FILE_DATA[i].name).delete().then(function() {
-              console.log("File found and deleted in Storage");
+              console.log("Arquivo encontrado e excluído no armazenamento");
             }).catch(function(error) {
               console.error("Erro ao remover documento: ", error);
             });
@@ -219,7 +219,7 @@ export class MyfilesComponent implements OnInit {
     .then(querySnapshot => {
       querySnapshot.docs.forEach(doc => {
         this.afs.collection('files').doc(doc.data().FileID).get().toPromise().then((doc) => {
-          if(this.isDoctorDisplay == "Doctor"){
+          if(this.isDoctorDisplay == "Médico(a)"){
             if(doc.exists) {
               this._file = doc.data().Name;
               this._action = doc.data().Action;

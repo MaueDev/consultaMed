@@ -68,30 +68,30 @@ export class ChatboxComponent implements OnInit {
   userControl = new FormControl();
   doctoruserGroups: userGroup[] = [
     {
-      _category: 'Appointments With',
+      _category: 'Compromissos com',
       _allUsers: this.appointmentdoc,
     },
     {
-      _category: 'Messages With',
+      _category: 'Mensagens com',
       _allUsers: this.messagewithdoc,
     },
     {
-      _category: 'All Doctors',
+      _category: 'Todos Médicos',
       _allUsers: this.doctordoc,
     },
     {
-      _category: 'All Patients',
+      _category: 'Todos Pacientes',
       _allUsers: this.patientdoc,
     },
   ];
 
   patientuserGroups: userGroup[] = [
     {
-      _category: 'Appointments With',
+      _category: 'Compromissos com',
       _allUsers: this.appointmentdoc,
     },
     {
-      _category: 'Messages With',
+      _category: 'Mensagens com',
       _allUsers: this.messagewithdoc,
     },
   ];
@@ -123,10 +123,10 @@ export class ChatboxComponent implements OnInit {
     // Fetch user's data
     this.fetchuserdata()
 
-    // Update doctordoc
+    // Atualiza doutordoc
     this.updateDoctorsPatients()
 
-    // Update appointments
+    // Atualizar compromissos
     this.updateappointments()
 
     this.updateMessages()
@@ -141,44 +141,44 @@ export class ChatboxComponent implements OnInit {
           this.firstNameDisplay = doc.data().firstName;
           this.lastNameDisplay = doc.data().lastName;
           if (doc.data().isDoctor == true) {
-            this.isDoctorDisplay = "Doctor";
-            this.surname = "Dr. "
+            this.isDoctorDisplay = "Médico(a)";
+            this.surname = "Dr(a). "
             this.isDoctor = true;
           } else {
-            this.isDoctorDisplay = "Patient";
+            this.isDoctorDisplay = "Paciente";
             this.isDoctor = false;
           }
       } else {
-          console.log("No such document!");
+          console.log("Não há documento!");
       }
   }).catch(function(error) {
-      console.log("Error getting document:", error);
+      console.log("Erro ao obter o documento:", error);
   });
   }
 
-  // This method updates the selection list on the chat page with doctors and patients.
+  // Este método atualiza a lista de seleção na página de bate-papo com médicos e pacientes.
   updateDoctorsPatients() {
     this.afs.collection('users').get().toPromise()
     .then(querySnapshot => {
       querySnapshot.docs.forEach(doc => {
-          // If they are a doctor
+          // Se eles são médicos
           if (doc.data().isDoctor == true) {
-            // and they are not you
+            // e eles não são você
             if (doc.data().uid != this.displayuid) {
-              // Remove all users without names
+              // Remove todos os usuários sem nomes
               if (!(doc.data().firstName == null || doc.data().firstName == null || doc.data().firstName == "" || doc.data().lastName == "")) {
-                // then print their name
+                // então imprime seu nome
                 var test = {doctor: doc.data().firstName + " " + doc.data().lastName, email: doc.data().email, uid: doc.data().uid}
                 this.doctordoc.push(test);
               }
             }
           }
           if (doc.data().isDoctor == false) {
-            // and they are not you
+            // e eles não são você
             if (doc.data().uid != this.displayuid) {
-              // Remove all users without names
+              // Remove todos os usuários sem nomes
               if (!(doc.data().firstName == null || doc.data().firstName == null || doc.data().firstName == "" || doc.data().lastName == "")) {
-                // then print their name
+                // então imprime seu nome
                 var test = {doctor: doc.data().firstName + " " + doc.data().lastName, email: doc.data().email, uid: doc.data().uid}
                 this.patientdoc.push(test);
                 }
@@ -189,7 +189,6 @@ export class ChatboxComponent implements OnInit {
         });
     }
 
-    // This method 
     updateMessages() {
       this.afs.collection('chats').doc(this.displayuid).collection('chatswith').get().toPromise()
       .then(querySnapshot => {
@@ -205,13 +204,13 @@ export class ChatboxComponent implements OnInit {
     });
     }
 
-    // This method updates the selection list on the chat page with people who you have appointments.
+  // Este método atualiza a lista de seleção na página de bate-papo com as pessoas com quem você tem compromissos.
     updateappointments() {
       this.afs.collection('appointments').get().toPromise()
       .then(querySnapshot => {
         querySnapshot.docs.forEach(doc => {
           this.checkbool = true;
-          // If the current doc has the user's uid in it as the sender or receiver.
+          // Se o documento atual tiver o uid do usuário como remetente ou destinatário.
           if (this.displayuid == doc.data().senderuid)
           {
             for (var i = 0; i < this.appointmentdoc.length; i++) {
@@ -256,14 +255,12 @@ export class ChatboxComponent implements OnInit {
     })
   }
 
-  // This snackbar box will trigger if the current user is a patient and has no appointments.
   noApptDialog() {
     if (this.appointmentdoc.length == 0) {
-      this.snackbar.open("No appointments found for the current user. Please schedule an appointment to chat.", 'Dismiss', {duration: 10000});
+      this.snackbar.open("Nenhum compromisso encontrado para o usuário atual. Agende um horário para conversarmos.", 'Fechar', {duration: 10000});
     }
   }
 
-  // This method is called when you send a message.
   sendMessage(message) {
     var date = new Date();
     var currenttime = this.datePipe.transform(new Date(), "h:mm a")
@@ -334,7 +331,6 @@ export class ChatboxComponent implements OnInit {
     this.usermessage = [];
     let autoid = this.afs.createId()
     this.selecteduid = Doctor;
-    // Used to create a folder on the sender and receiver can access.
     if (this.displayuid < Doctor)
     {
       var id = this.displayuid + "" + Doctor;
@@ -342,7 +338,6 @@ export class ChatboxComponent implements OnInit {
       var id = Doctor + "" + this.displayuid;
     }
 
-    // These next 2 loops are to find the selected UID's name and email.
     for (var i = 0; i < this.patientdoc.length; i++)
     {
       if (this.patientdoc[i].uid == this.selecteduid)
