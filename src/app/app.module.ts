@@ -7,12 +7,12 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './Home/home.component';
 import { AuthService } from './auth.service';
-import { LoginComponent } from './login/login.component';
-import { SignupComponent } from './signup/signup.component';
-import { MyaccountComponent } from './myaccount/myaccount.component';
-import { MyfilesComponent } from './myfiles/myfiles.component';
+import { LoginComponent } from './Login/login.component';
+import { SignupComponent } from './sair/signup.component';
+import { MeuPerfilComponent } from './MeuPerfil/meuperfil.component';
+import { MeuArquivosComponent } from './MeusArquivos/meusarquivos.component';
 import { ResetpasswordComponent } from './recuperarsenha/resetpassword.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -23,12 +23,12 @@ import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { MatTableModule} from '@angular/material'
 import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule } from  '@angular/material';
-import { ScheduleappointmentsComponent } from './scheduleappointments/scheduleappointments.component';
+import { ComponenteAgendarCompromissos } from './agendarcompromissoss/ComponenteAgendarCompromissos.component';
 import { DatePipe } from '@angular/common';
 import { MatMenuModule} from '@angular/material/menu';
 import { ChatboxComponent } from './chatbox/chatbox.component';
 import { NgxAgoraModule } from 'ngx-agora';
-import { VideocallComponent } from './videocall/videocall.component';
+import { VideocallComponent } from './videochamada/videochamada.component';
 
 @NgModule({
   declarations: [
@@ -36,10 +36,10 @@ import { VideocallComponent } from './videocall/videocall.component';
     HomeComponent,
     LoginComponent,
     SignupComponent,
-    MyaccountComponent,
-    MyfilesComponent,
+    MeuPerfilComponent,
+    MeuArquivosComponent,
     ResetpasswordComponent,
-    ScheduleappointmentsComponent,
+    ComponenteAgendarCompromissos,
     ChatboxComponent,
     VideocallComponent,
   ],
@@ -86,7 +86,7 @@ import { VideocallComponent } from './videocall/videocall.component';
     DatePipe
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ScheduleappointmentsComponent]
+  entryComponents: [ComponenteAgendarCompromissos]
 })
 export class AppModule {
   constructor(private db: AngularFirestore) {

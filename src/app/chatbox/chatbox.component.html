@@ -1,6 +1,6 @@
 <mat-toolbar id="mainToolbar" color="primary">
   <mat-icon (click)="onToolbarMenuToggle()" id="toolbarMenu">subject</mat-icon>
-  Telemedicine Application
+  <img src="./assets/img/5392447-ai.webp" class="logoContent" />
   <span class="toolbar-spacer"></span>
 </mat-toolbar>
 
@@ -10,33 +10,30 @@
       <mat-card>
         <mat-card-header>
           <span mat-card-avatar class="material-icons" style="font-size: 40px;">account_circle</span>
-          <mat-card-title>{{surname}}{{firstNameDisplay}} {{lastNameDisplay}}</mat-card-title>
-          <mat-card-subtitle>{{isDoctorDisplay}}</mat-card-subtitle>
+          <mat-card-title>{{vulgo}}{{primeiroNomeDisplay}} {{sobreNomeDisplay}}</mat-card-title>
+          <mat-card-subtitle>{{isMedicoDisplay}}</mat-card-subtitle>
         </mat-card-header>
       </mat-card>
       <mat-nav-list class="menu-item">
         <a mat-list-item [routerLink]="'/home'" [routerLinkActive]="['active']">
             <mat-icon class="home-icon" aria-hidden="false" aria-label="Example home icon">home</mat-icon>Inicio
         </a>
-        <a mat-list-item [routerLink]="'/myfiles'" [routerLinkActive]="['active']">
+        <a mat-list-item [routerLink]="'/meusarquivos'" [routerLinkActive]="['active']">
             <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">upload_file
             </mat-icon>Meus arquivos
         </a>
         <a mat-list-item [routerLink]="'/chatbox'" [routerLinkActive]="['active']">
             <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">chat</mat-icon>Chats
         </a>
-        <a mat-list-item [routerLink]="'/videocall'" [routerLinkActive]="['active']">
-            <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">duo</mat-icon>Vídeo
-            Call
+        <a mat-list-item [routerLink]="'/videochamada'" [routerLinkActive]="['active']">
+            <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">duo</mat-icon>Vídeo Chamada
         </a>
-        <a mat-list-item [routerLink]="'/myaccount'" [routerLinkActive]="['active']">
+        <a mat-list-item [routerLink]="'/meuperfil'" [routerLinkActive]="['active']">
             <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">account_circle
-            </mat-icon>My
-            Account
+            </mat-icon>Meu Perfil
         </a>
         <a mat-list-item (click)="authService.SignOut()">
-            <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">logout</mat-icon>Sign
-            Out
+            <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">logout</mat-icon>Sair
         </a>
     </mat-nav-list>
     </mat-list>
@@ -46,43 +43,43 @@
       <div class="container">
         <h2 style="padding-right: 55%;">Chat</h2>
         <br>
-        <mat-card class="appointment-card">
+        <mat-card class="compromisso-card">
 
-        <div *ngIf="isDoctor == false">
+        <div *ngIf="isMedico == false">
           <div *ngIf="noappt == true">
             <br>
-            <p class="noApptText">There are no appointments or messages for the current user. Please make an appointment to chat.</p>
+            <p class="noApptText">Não há compromissos ou mensagens para o usuário atual. Por favor, faça um compromisso para conversar.</p>
             <br>
           </div>
         </div>
 
 
-        <div *ngIf="isDoctor == false">
+        <div *ngIf="isMedico == false">
           <div *ngIf="noappt == false">
             <mat-form-field>
               <mat-label>Conversar com:</mat-label>
               <mat-select [formControl]="userControl" #allUser (selectionChange)="showMessages(allUser.value)">
-                <mat-optgroup *ngFor="let group of patientuserGroups" [label]="group._category">
-                  <mat-option *ngFor="let allUsers of group._allUsers" [value]="allUsers.uid">
-                    Dr(a). {{allUsers.doctor}} - {{allUsers.email}}
+                <mat-optgroup *ngFor="let group of pacienteuserGroups" [label]="group._categoria">
+                  <mat-option *ngFor="let allUsers of group._allUsuario" [value]="allUsers.uid">
+                    Dr(a). {{allUsers.medico}} - {{allUsers.email}}
                   </mat-option>
                 </mat-optgroup>
               </mat-select>
             </mat-form-field>
             <br>
             <div #scroller [scrollTop]="scroller.scrollHeight" class="feedWrapper" style="overflow:scroll; height: xyz;">
-              <div class="messageContainer" *ngFor="let usermessage of usermessage">
+              <div class="messageContainer" *ngFor="let usuariomessage of usuariomessage">
                 <div class="messageData">
-                  <span class="sender">
-                    {{usermessage.sender}}
+                  <span class="remetente">
+                    {{usuariomessage.remetente}}
                   </span>
                   <span class="timestamp">
-                    {{usermessage.date}}<br>
-                    {{usermessage.time}}
+                    {{usuariomessage.date}}<br>
+                    {{usuariomessage.time}}
                   </span>
                 </div>
                 <div class="messageContent">
-                  {{usermessage.message}}
+                  {{usuariomessage.message}}
                 </div>
               </div>
             </div>
@@ -100,32 +97,32 @@
           </div>
         </div>
 
-          <div class="col" *ngIf="isDoctor == true">
+          <div class="col" *ngIf="isMedico == true">
             <br>
             <mat-form-field>
               <mat-label>Conversar com:</mat-label>
               <mat-select [formControl]="userControl" #allUser (selectionChange)="showMessages(allUser.value)">
-                <mat-optgroup *ngFor="let group of doctoruserGroups" [label]="group._category">
-                  <mat-option *ngFor="let allUsers of group._allUsers" [value]="allUsers.uid">
-                    {{allUsers.doctor}} - {{allUsers.email}}
+                <mat-optgroup *ngFor="let group of medicouserGroups" [label]="group._categoria">
+                  <mat-option *ngFor="let allUsers of group._allUsuario" [value]="allUsers.uid">
+                    {{allUsers.medico}} - {{allUsers.email}}
                   </mat-option>
                 </mat-optgroup>
               </mat-select>
             </mat-form-field>
 
           <div #scroller [scrollTop]="scroller.scrollHeight" class="feedWrapper" style="overflow:scroll; height: xyz;">
-            <div class="messageContainer" *ngFor="let usermessage of usermessage">
+            <div class="messageContainer" *ngFor="let usuariomessage of usuariomessage">
               <div class="messageData">
-                <span class="sender">
-                  {{usermessage.sender}}
+                <span class="remetente">
+                  {{usuariomessage.remetente}}
                 </span>
                 <span class="timestamp">
-                  {{usermessage.date}}<br>
-                  {{usermessage.time}}
+                  {{usuariomessage.date}}<br>
+                  {{usuariomessage.time}}
                 </span>
               </div>
               <div class="messageContent">
-                {{usermessage.message}}
+                {{usuariomessage.message}}
               </div>
             </div>
           </div>

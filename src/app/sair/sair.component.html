@@ -1,0 +1,15 @@
+<!-- Sair Component is not being Used -->
+<div class="s_body">
+    <div class="sairbox">
+        <h1>Inscrever-se</h1>
+        <form>
+            <p>Nome de Usuário ou Email</p>
+            <input type="text" name="" placeholder="Usuário ou Email" #userEmail required>
+            <p>Senha</p>
+            <input type="password" name="" placeholder="Senha" #userPwd required>
+            <input type="submit" name="" value="Entrar" (click)="authService.Sair(userEmail.value, userPwd.value)">
+            <div>
+            </div>
+        </form>
+    </div>
+</div>

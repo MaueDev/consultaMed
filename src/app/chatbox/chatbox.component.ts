@@ -9,23 +9,23 @@ import {FormControl} from '@angular/forms';
 
 
 export interface userdoc {
-  doctor: string;
+  medico: string;
   email: string;
   uid: string;
 }
 
 interface userGroup {
-  _category: string;
-  _allUsers: any;
+  _categoria: string;
+  _allUsuario: any;
 }
 
-export interface usermessage {
+export interface usuariomessage {
   date: any;
   message: any;
-  receiver: any;
-  receiveruid: string;
-  sender: string;
-  senderuid: string;
+  receptor: any;
+  receptoruid: string;
+  remetente: string;
+  remetenteuid: string;
   time: any;
   timestamp: string;
 }
@@ -38,17 +38,17 @@ export interface usermessage {
 export class ChatboxComponent implements OnInit {
   displayuid: string;
   displayemail: string;
-  firstNameDisplay: string;
-  lastNameDisplay: string;
-  isDoctorDisplay: string;
-  surname: string;
-  isDoctor: boolean;
-  doctordoc:userdoc[] = [];
-  patientdoc:userdoc[] = [];
-  appointmentdoc:userdoc[] = [];
+  primeiroNomeDisplay: string;
+  sobreNomeDisplay: string;
+  isMedicoDisplay: string;
+  vulgo: string;
+  isMedico: boolean;
+  medicodoc:userdoc[] = [];
+  pacientedoc:userdoc[] = [];
+  compromissodoc:userdoc[] = [];
   checkbool: boolean;
   flag: boolean;
-  selectedappointment: string;
+  selectedcompromisso: string;
   expenses: any;
   books: any;
   value: any;
@@ -56,43 +56,43 @@ export class ChatboxComponent implements OnInit {
   noappt: boolean;
   messagebool: boolean;
 
-  usermessage: usermessage[] = [
+  usuariomessage: usuariomessage[] = [
   ];
 
-  messagedoc: usermessage[] = [
+  messagedoc: usuariomessage[] = [
   ];
 
   messagewithdoc: userdoc[] = [
   ];
  
   userControl = new FormControl();
-  doctoruserGroups: userGroup[] = [
+  medicouserGroups: userGroup[] = [
     {
-      _category: 'Compromissos com',
-      _allUsers: this.appointmentdoc,
+      _categoria: 'Compromissos com',
+      _allUsuario: this.compromissodoc,
     },
     {
-      _category: 'Mensagens com',
-      _allUsers: this.messagewithdoc,
+      _categoria: 'Mensagens com',
+      _allUsuario: this.messagewithdoc,
     },
     {
-      _category: 'Todos Médicos',
-      _allUsers: this.doctordoc,
+      _categoria: 'Todos Médicos',
+      _allUsuario: this.medicodoc,
     },
     {
-      _category: 'Todos Pacientes',
-      _allUsers: this.patientdoc,
+      _categoria: 'Todos Pacientes',
+      _allUsuario: this.pacientedoc,
     },
   ];
 
-  patientuserGroups: userGroup[] = [
+  pacienteuserGroups: userGroup[] = [
     {
-      _category: 'Compromissos com',
-      _allUsers: this.appointmentdoc,
+      _categoria: 'Compromissos com',
+      _allUsuario: this.compromissodoc,
     },
     {
-      _category: 'Mensagens com',
-      _allUsers: this.messagewithdoc,
+      _categoria: 'Mensagens com',
+      _allUsuario: this.messagewithdoc,
     },
   ];
 
@@ -100,7 +100,7 @@ export class ChatboxComponent implements OnInit {
   constructor(
     public authService: AuthService,
     public afAuth: AngularFireAuth,
-    public afs: AngularFirestore,   // Inject Firestore service
+    public afs: AngularFirestore,   
     private dialog: MatDialog,
     private datePipe: DatePipe,
     private snackbar: MatSnackBar,
@@ -120,33 +120,32 @@ export class ChatboxComponent implements OnInit {
     } catch (error) {
       this.displayemail = localStorage.getItem("displayemail");
     }
-    // Fetch user's data
-    this.fetchuserdata()
+    
+    this.buscarDadosUsuario()
 
-    // Atualiza doutordoc
-    this.updateDoctorsPatients()
+    // Atualiza medicos
+    this.updateMedicoPaciente()
 
     // Atualizar compromissos
-    this.updateappointments()
+    this.updateCompromissos()
 
     this.updateMessages()
 
   }
 
-  fetchuserdata() {
-    // Retrieve user data
-    var docRef = this.afs.collection('users').doc(this.displayuid);
+  buscarDadosUsuario() {
+    var docRef = this.afs.collection('usuario').doc(this.displayuid);
     docRef.get().toPromise().then((doc) => {
       if (doc.exists) {
-          this.firstNameDisplay = doc.data().firstName;
-          this.lastNameDisplay = doc.data().lastName;
-          if (doc.data().isDoctor == true) {
-            this.isDoctorDisplay = "Médico(a)";
-            this.surname = "Dr(a). "
-            this.isDoctor = true;
+          this.primeiroNomeDisplay = doc.data().primeiroNome;
+          this.sobreNomeDisplay = doc.data().sobrenome;
+          if (doc.data().isMedico == true) {
+            this.isMedicoDisplay = "Médico(a)";
+            this.vulgo = "Dr(a). "
+            this.isMedico = true;
           } else {
-            this.isDoctorDisplay = "Paciente";
-            this.isDoctor = false;
+            this.isMedicoDisplay = "Paciente";
+            this.isMedico = false;
           }
       } else {
           console.log("Não há documento!");
@@ -157,30 +156,30 @@ export class ChatboxComponent implements OnInit {
   }
 
   // Este método atualiza a lista de seleção na página de bate-papo com médicos e pacientes.
-  updateDoctorsPatients() {
-    this.afs.collection('users').get().toPromise()
+  updateMedicoPaciente() {
+    this.afs.collection('usuario').get().toPromise()
     .then(querySnapshot => {
       querySnapshot.docs.forEach(doc => {
           // Se eles são médicos
-          if (doc.data().isDoctor == true) {
+          if (doc.data().isMedico == true) {
             // e eles não são você
             if (doc.data().uid != this.displayuid) {
               // Remove todos os usuários sem nomes
-              if (!(doc.data().firstName == null || doc.data().firstName == null || doc.data().firstName == "" || doc.data().lastName == "")) {
+              if (!(doc.data().primeiroNome == null || doc.data().primeiroNome == null || doc.data().primeiroNome == "" || doc.data().sobrenome == "")) {
                 // então imprime seu nome
-                var test = {doctor: doc.data().firstName + " " + doc.data().lastName, email: doc.data().email, uid: doc.data().uid}
-                this.doctordoc.push(test);
+                var test = {medico: doc.data().primeiroNome + " " + doc.data().sobrenome, email: doc.data().email, uid: doc.data().uid}
+                this.medicodoc.push(test);
               }
             }
           }
-          if (doc.data().isDoctor == false) {
+          if (doc.data().isMedico == false) {
             // e eles não são você
             if (doc.data().uid != this.displayuid) {
               // Remove todos os usuários sem nomes
-              if (!(doc.data().firstName == null || doc.data().firstName == null || doc.data().firstName == "" || doc.data().lastName == "")) {
+              if (!(doc.data().primeiroNome == null || doc.data().primeiroNome == null || doc.data().primeiroNome == "" || doc.data().sobrenome == "")) {
                 // então imprime seu nome
-                var test = {doctor: doc.data().firstName + " " + doc.data().lastName, email: doc.data().email, uid: doc.data().uid}
-                this.patientdoc.push(test);
+                var test = {medico: doc.data().primeiroNome + " " + doc.data().sobrenome, email: doc.data().email, uid: doc.data().uid}
+                this.pacientedoc.push(test);
                 }
               }
             }
@@ -194,7 +193,7 @@ export class ChatboxComponent implements OnInit {
       .then(querySnapshot => {
         querySnapshot.docs.forEach(doc => {
           if (doc.exists) {
-            var test = {doctor: doc.data().user_name, email: doc.data().user_email, uid: doc.data().user_uid};
+            var test = {medico: doc.data().user_name, email: doc.data().user_email, uid: doc.data().user_uid};
             this.messagewithdoc.push(test);
             this.noappt = false;
           } else {
@@ -205,45 +204,45 @@ export class ChatboxComponent implements OnInit {
     }
 
   // Este método atualiza a lista de seleção na página de bate-papo com as pessoas com quem você tem compromissos.
-    updateappointments() {
-      this.afs.collection('appointments').get().toPromise()
+    updateCompromissos() {
+      this.afs.collection('compromissos').get().toPromise()
       .then(querySnapshot => {
         querySnapshot.docs.forEach(doc => {
           this.checkbool = true;
           // Se o documento atual tiver o uid do usuário como remetente ou destinatário.
-          if (this.displayuid == doc.data().senderuid)
+          if (this.displayuid == doc.data().remetenteuid)
           {
-            for (var i = 0; i < this.appointmentdoc.length; i++) {
-              if (this.appointmentdoc[i].uid == doc.data().receiveruid)
+            for (var i = 0; i < this.compromissodoc.length; i++) {
+              if (this.compromissodoc[i].uid == doc.data().receptoruid)
                 {
                   this.checkbool = false;
                 }
               }
             if (this.checkbool == true)
               {
-                var test = {doctor: doc.data().receiver, email: doc.data().receiveremail, uid: doc.data().receiveruid}
-                this.appointmentdoc.push(test);
+                var test = {medico: doc.data().receptor, email: doc.data().receptoremail, uid: doc.data().receptoruid}
+                this.compromissodoc.push(test);
               }
               } 
-          if (this.displayuid == doc.data().receiveruid)
+          if (this.displayuid == doc.data().receptoruid)
           {
-            for (var i = 0; i < this.appointmentdoc.length; i++) {
-              if (this.appointmentdoc[i].uid == doc.data().senderuid)
+            for (var i = 0; i < this.compromissodoc.length; i++) {
+              if (this.compromissodoc[i].uid == doc.data().remetenteuid)
                 {
                   this.checkbool = false;
                 }
               }
             if (this.checkbool == true)
               {
-                var test = {doctor: doc.data().sender, email: doc.data().senderemail, uid: doc.data().senderuid}
-                this.appointmentdoc.push(test);
+                var test = {medico: doc.data().remetente, email: doc.data().remetenteemail, uid: doc.data().remetenteuid}
+                this.compromissodoc.push(test);
               }
               } 
       });
       if (this.noappt = true) {
-        if (this.appointmentdoc.length == 0)
+        if (this.compromissodoc.length == 0)
         {
-          if (this.isDoctor == false)
+          if (this.isMedico == false)
           {
             this.noappt = true;
           }
@@ -256,7 +255,7 @@ export class ChatboxComponent implements OnInit {
   }
 
   noApptDialog() {
-    if (this.appointmentdoc.length == 0) {
+    if (this.compromissodoc.length == 0) {
       this.snackbar.open("Nenhum compromisso encontrado para o usuário atual. Agende um horário para conversarmos.", 'Fechar', {duration: 10000});
     }
   }
@@ -264,28 +263,28 @@ export class ChatboxComponent implements OnInit {
   sendMessage(message) {
     var date = new Date();
     var currenttime = this.datePipe.transform(new Date(), "h:mm a")
-    var currentdate = this.datePipe.transform(new Date(), "M/dd/yyyy")
-    var personuid = this.selectedappointment;
+    var dataatual = this.datePipe.transform(new Date(), "dd/M/yyyy")
+    var personuid = this.selectedcompromisso;
     var message = message; 
-    for (var i = 0; i < this.appointmentdoc.length; i++) {
-      if (this.appointmentdoc[i].uid == personuid)
+    for (var i = 0; i < this.compromissodoc.length; i++) {
+      if (this.compromissodoc[i].uid == personuid)
         {
-        var person = this.appointmentdoc[i].doctor;
+        var person = this.compromissodoc[i].medico;
         }
     }
     if (person == undefined) {
-      for (var i = 0; i < this.doctordoc.length; i++) {
-        if (this.doctordoc[i].uid == personuid)
+      for (var i = 0; i < this.medicodoc.length; i++) {
+        if (this.medicodoc[i].uid == personuid)
           {
-          var person = this.doctordoc[i].doctor;
+          var person = this.medicodoc[i].medico;
           }
       }
     }
     if (person == undefined) {
-      for (var i = 0; i < this.patientdoc.length; i++) {
-        if (this.patientdoc[i].uid == personuid)
+      for (var i = 0; i < this.pacientedoc.length; i++) {
+        if (this.pacientedoc[i].uid == personuid)
           {
-          var person = this.patientdoc[i].doctor;
+          var person = this.pacientedoc[i].medico;
           }
       }
     }
@@ -302,20 +301,20 @@ export class ChatboxComponent implements OnInit {
       {
         docRef.collection('messages').doc(autoid).set({
           message: message,
-          from: this.firstNameDisplay + " " + this.lastNameDisplay,
+          from: this.primeiroNomeDisplay + " " + this.sobreNomeDisplay,
           timestamp: date
         })
       } else {
       var docRef2 = this.afs.collection('chats').doc(id).collection('messages').doc(autoid);
       docRef2.set({
         message: message,
-        sender: this.firstNameDisplay + " " + this.lastNameDisplay,
-        senderuid: this.displayuid,
+        remetente: this.primeiroNomeDisplay + " " + this.sobreNomeDisplay,
+        remetenteuid: this.displayuid,
         timestamp: date,
-        date: currentdate,
+        date: dataatual,
         time: currenttime,
-        receiver: person,
-        receiveruid: personuid
+        receptor: person,
+        receptoruid: personuid
       })
       }
     })
@@ -327,54 +326,54 @@ export class ChatboxComponent implements OnInit {
     }, 2000);
   }
 
-  showMessages(Doctor) {
-    this.usermessage = [];
+  showMessages(Medico) {
+    this.usuariomessage = [];
     let autoid = this.afs.createId()
-    this.selecteduid = Doctor;
-    if (this.displayuid < Doctor)
+    this.selecteduid = Medico;
+    if (this.displayuid < Medico)
     {
-      var id = this.displayuid + "" + Doctor;
+      var id = this.displayuid + "" + Medico;
     } else {
-      var id = Doctor + "" + this.displayuid;
+      var id = Medico + "" + this.displayuid;
     }
 
-    for (var i = 0; i < this.patientdoc.length; i++)
+    for (var i = 0; i < this.pacientedoc.length; i++)
     {
-      if (this.patientdoc[i].uid == this.selecteduid)
+      if (this.pacientedoc[i].uid == this.selecteduid)
       {
-        var DoctorName = this.patientdoc[i].doctor;
-        var DoctorEmail = this.patientdoc[i].email;
+        var MedicoNome = this.pacientedoc[i].medico;
+        var MedicoEmail = this.pacientedoc[i].email;
       }
     }
-    for (var i = 0; i < this.doctordoc.length; i++)
+    for (var i = 0; i < this.medicodoc.length; i++)
     {
-      if (this.doctordoc[i].uid == this.selecteduid)
+      if (this.medicodoc[i].uid == this.selecteduid)
       {
-        var DoctorName = this.doctordoc[i].doctor;
-        var DoctorEmail = this.doctordoc[i].email;
+        var MedicoNome = this.medicodoc[i].medico;
+        var MedicoEmail = this.medicodoc[i].email;
       }
 
     }    
 
-    this.selectedappointment = Doctor;
+    this.selectedcompromisso = Medico;
 
     var docRef = this.afs.collection('chats').doc(this.displayuid).collection('chatswith').doc(this.selecteduid);
     docRef.get().toPromise().then((doc) => {
       if (doc.exists)
         {
-          console.log("Found")!
+          console.log("encontrado")!
         } else {
-          console.log("Not Found!")
+          console.log("Não encontrado!")
           var docRef2 = this.afs.collection('chats').doc(this.displayuid).collection('chatswith').doc(this.selecteduid);
           docRef2.set({
             user_uid: this.selecteduid,
-            user_name: DoctorName,
-            user_email: DoctorEmail,
+            user_name: MedicoNome,
+            user_email: MedicoEmail,
           })
           var docRef3 = this.afs.collection('chats').doc(this.selecteduid).collection('chatswith').doc(this.displayuid);
           docRef3.set({
             user_uid: this.displayuid,
-            user_name: this.firstNameDisplay + " " + this.lastNameDisplay,
+            user_name: this.primeiroNomeDisplay + " " + this.sobreNomeDisplay,
             user_email: this.displayemail,
           })
           this.refresh()
@@ -385,13 +384,10 @@ export class ChatboxComponent implements OnInit {
     docRef2.get().toPromise().then((doc) => {
     if (doc.exists)
       {
-        console.log("Found")!
+        console.log("Encontrado")!
       } else {
-        console.log("Not Found!")
-        //var docRef3 = this.afs.collection('chats').doc(id);
-        //docRef3.set({
-          //initialsender: this.displayuid
-        //})
+        console.log("Não Encontrado!")
+
         var docRef2 = this.afs.collection('chats').doc(id).collection('messages').doc(id);
         docRef2.set({
           message: "",
@@ -400,30 +396,16 @@ export class ChatboxComponent implements OnInit {
         }
     }) 
     
-    // Activate Listener
     this.afs.collection('chats').doc(id).collection('messages').valueChanges().subscribe(docs => {
-    // Clear the message list when there is a new message added, updated or deleted.
-    this.usermessage = [];
-    // Put all of the remaining documents in the message list.
+    this.usuariomessage = [];
     docs.forEach(doc => {
-      if (doc.senderuid == this.selecteduid || doc.receiveruid == this.selecteduid) {
-        if (doc.senderuid == this.displayuid || doc.receiveruid == this.displayuid) {
-        var test = {sender: doc.sender, receiver: doc.receiver, message: doc.message, time: doc.time, date: doc.date, timestamp: doc.timestamp, receiveruid: doc.receiveruid, senderuid: doc.senderuid}
-        this.usermessage.push(test);
-        this.usermessage = this.usermessage.sort((a, b) => a.timestamp < b.timestamp ? -1 : a.timestamp > b.timestamp ? 1 : 0)
+      if (doc.remetenteuid == this.selecteduid || doc.receptoruid == this.selecteduid) {
+        if (doc.remetenteuid == this.displayuid || doc.receptoruid == this.displayuid) {
+        var test = {remetente: doc.remetente, receptor: doc.receptor, message: doc.message, time: doc.time, date: doc.date, timestamp: doc.timestamp, receptoruid: doc.receptoruid, remetenteuid: doc.remetenteuid}
+        this.usuariomessage.push(test);
+        this.usuariomessage = this.usuariomessage.sort((a, b) => a.timestamp < b.timestamp ? -1 : a.timestamp > b.timestamp ? 1 : 0)
         }
       }
-    /*// Activate Listener (Old switching method)
-    this.afs.collection('chats').doc(id).collection('messages').valueChanges().subscribe(docs => {
-      // Clear the message list when there is a new message added, updated or deleted.
-      this.usermessage = [];
-      // Put all of the remaining documents in the message list.
-      docs.forEach(doc => {
-        var test = {sender: doc.sender, receiver: doc.receiver, message: doc.message, time: doc.time, date: doc.date, timestamp: doc.timestamp, receiveruid: doc.receiveruid, senderuid: doc.senderuid}
-        this.usermessage.push(test);
-        this.usermessage = this.usermessage.sort((a, b) => a.timestamp < b.timestamp ? -1 : a.timestamp > b.timestamp ? 1 : 0)
-      });
-    }); */
     });
   });
   }
@@ -432,7 +414,7 @@ export class ChatboxComponent implements OnInit {
   contentMargin = 240;
 
   onToolbarMenuToggle() {
-    console.log('On toolbar toggled', this.isMenuOpen);
+    console.log('No toolbar toggled', this.isMenuOpen);
     this.isMenuOpen = !this.isMenuOpen;
 
     if (!this.isMenuOpen) {

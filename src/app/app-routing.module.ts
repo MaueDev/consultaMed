@@ -1,25 +1,25 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
-import { SignupComponent } from './signup/signup.component';
-import { MyaccountComponent } from './myaccount/myaccount.component';
-import { MyfilesComponent } from './myfiles/myfiles.component';
+import { HomeComponent } from './Home/home.component';
+import { LoginComponent } from './Login/login.component';
+import { SignupComponent } from './sair/signup.component';
+import { MeuPerfilComponent } from './MeuPerfil/meuperfil.component';
+import { MeuArquivosComponent } from './MeusArquivos/meusarquivos.component';
 import { ResetpasswordComponent } from './recuperarsenha/resetpassword.component';
 import { ChatboxComponent } from './chatbox/chatbox.component';
-import { VideocallComponent } from './videocall/videocall.component';
+import { VideocallComponent } from './videochamada/videochamada.component';
 
 const routes: Routes = [
 
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'myaccount', component: MyaccountComponent },
-  { path: 'myfiles', component: MyfilesComponent },
+  { path: 'sair', component: SignupComponent },
+  { path: 'meuperfisdaql', component: MeuPerfilComponent },
+  { path: 'meusarquivos', component: MeuArquivosComponent },
   { path: 'recuperarsenha', component: ResetpasswordComponent },
   { path: 'chatbox', component: ChatboxComponent },
-  { path: 'videocall', component: VideocallComponent },
+  { path: 'videochamada', component: VideocallComponent },
 
 ];
 

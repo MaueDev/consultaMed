@@ -1,0 +1,26 @@
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Compromisso com:</mat-label>
+    <mat-select #Medico (selectionChange)="filterHorario(Medico.value, Date.value)">
+      <mat-option *ngFor="let userdoc of userdoc" [value]="userdoc.medico" #medico >{{vulgo}}{{userdoc.medico}} - {{userdoc.email}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <mat-label>Escolha uma data</mat-label>
+    <input matInput [matDatepicker]="picker" (dateChange)="filterMedico(Date.value)" [min]="dataatual" #Date>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="fill">
+    <mat-label>Selecionar horario</mat-label>
+    <mat-select #Time required>
+      <mat-option *ngFor="let time of time" [value]="time.value">{{time.value}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <div mat-dialog-actions style="float: right;"><button mat-raised-button (click)="[salvarCompromisso(Date.value, Time.value, Medico.value), refresh()]" color="accent">Salvar</button></div>
+
+

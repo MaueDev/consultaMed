@@ -1,0 +1,83 @@
+<mat-toolbar id="mainToolbar" color="primary">
+  <mat-icon (click)="onToolbarMenuToggle()" id="toolbarMenu">subject</mat-icon>
+  <img src="./assets/img/5392447-ai.webp" class="logoContent" />
+  <span class="toolbar-spacer"></span>
+</mat-toolbar>
+
+<mat-sidenav-container id="sidenavContainer" fullscreen>
+  <mat-sidenav mode="side" #sidenav id="sidenav" [class.menu-open]="isMenuOpen" [class.menu-close]="!isMenuOpen" opened>
+    <mat-list id="menus">
+      <mat-card>
+        <mat-card-header>
+          <span mat-card-avatar class="material-icons" style="font-size: 40px;">account_circle</span>
+          <mat-card-title>{{vulgo}}{{primeiroNomeDisplay}} {{sobreNomeDisplay}}</mat-card-title>
+          <mat-card-subtitle>{{isMedicoDisplay}}</mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+      <mat-nav-list class="menu-item">
+        <a mat-list-item [routerLink]="'/home'" [routerLinkActive]="['active']">
+          <mat-icon class="home-icon" aria-hidden="false" aria-label="Example home icon">home</mat-icon>Inicio
+        </a>
+        <a mat-list-item [routerLink]="'/meusarquivos'" [routerLinkActive]="['active']">
+          <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">upload_file</mat-icon>Meus arquivos
+        </a>
+        <a mat-list-item [routerLink]="'/chatbox'" [routerLinkActive]="['active']">
+          <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">chat</mat-icon>Chats
+        </a>
+        <a mat-list-item [routerLink]="'/videocall'" [routerLinkActive]="['active']">
+          <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">duo</mat-icon>Vídeo Chamada
+        </a>
+        <a mat-list-item [routerLink]="'/meuperfil'" [routerLinkActive]="['active']">
+          <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">account_circle</mat-icon>Meu Perfil
+        </a>
+        <a mat-list-item (click)="authService.SignOut()">
+          <mat-icon class="home-icon" aria-hidden="false" aria-label="Example file icon">logout</mat-icon>Sair
+        </a>
+      </mat-nav-list>
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div style="height: 80vh;">
+      <div class="container">
+        <h2 style="padding-right: 55%;">Meu Perfil</h2>
+        <br>
+        <mat-card class="compromisso-card">
+          <mat-card-title>Informação do usuário</mat-card-title>
+          <form>
+            <br>
+              <mat-form-field class="example-full-width">
+                <mat-label>Primeiro nome</mat-label>
+                <input matInput placeholder="Seu primeiro nome" value="{{primeiroNomeDisplay}}" #primeiroNome>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Sobrenome</mat-label>
+                <input matInput placeholder="Seu sobrenome" value="{{sobreNomeDisplay}}" #sobrenome>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="example-full-width">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Seu Email" value="{{displayemail}}" readonly #email>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Data de nascimento</mat-label>
+                <input matInput placeholder="mm/dd/yyyy" value="{{dobDisplay}}" #dataAniversario>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Endereço</mat-label>
+                <input matInput placeholder="Seu endereço" value="{{enderecoDisplay}}" #endereco>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Plano de Saúde</mat-label>
+                <input matInput placeholder="Seu Plano de Saude" value="{{planoSaudeDisplay}}" #planodesaude>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Numero do Plano de Saúde</mat-label>
+                <input matInput placeholder="Numero do plano de saúde" value="{{planoSaudeIdDisplay}}" #planodesaudeid>
+              </mat-form-field>
+              <button type="submit" class="btn btn-danger" (click)="addData(primeiroNome.value, sobrenome.value, dataAniversario.value, endereco.value, planodesaude.value, planodesaudeid.value)">Salvar</button>
+          </form>
+          <br>
+        </mat-card>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

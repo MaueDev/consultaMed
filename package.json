@@ -1,6 +1,10 @@
 {
-  "name": "telemedicine-application",
+  "name": "consultamed-app",
   "version": "0.0.0",
+  "author": {
+    "name": "Yuri rezende",
+    "email": "Yuri.rezzde@gmail.com"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

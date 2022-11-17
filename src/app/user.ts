@@ -4,11 +4,11 @@ export interface User {
     displayName: string;
     photoURL: string;
     emailVerified: boolean;
-    firstName: string;
-    lastName: string;
-    dateofbirth: string;
-    address: string;
-    insurancecompany: string;
-    insuranceid: string;
-    isDoctor: boolean;
+    primeiroNome: string;
+    sobrenome: string;
+    dataAniversario: string;
+    endereco: string;
+    planodesaude: string;
+    planodesaudeid: string;
+    isMedico: boolean;
 }

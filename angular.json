@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "telemedicine-application": {
+    "consultamed-app": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/telemedicine-application",
+            "outputPath": "dist/consultamed-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -65,18 +65,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "telemedicine-application:build"
+            "browserTarget": "consultamed-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "telemedicine-application:build:production"
+              "browserTarget": "consultamed-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "telemedicine-application:build"
+            "browserTarget": "consultamed-app:build"
           }
         },
         "test": {
@@ -114,16 +114,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "telemedicine-application:serve"
+            "devServerTarget": "consultamed-app:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "telemedicine-application:serve:production"
+              "devServerTarget": "consultamed-app:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "telemedicine-application"
+  "defaultProject": "consultamed-app"
 }

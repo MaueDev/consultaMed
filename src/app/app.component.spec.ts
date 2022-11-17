@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'telemedicine-application'`, () => {
+  it(`should have as title 'consultamed-app'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('telemedicine-application');
+    expect(app.title).toEqual('consultamed-app');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('telemedicine-application app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('consultamed-app app is running!');
   });
 });

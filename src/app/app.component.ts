@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'telemedicine-application';
+  title = 'consultamed-app';
 
   constructor(public authService: AuthService,) { }
 

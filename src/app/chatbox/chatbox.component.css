@@ -3,7 +3,7 @@
   }
   
   
-  .appointment-card {
+  .compromisso-card {
     width: 80%;
     padding: 2%;
   }
@@ -18,7 +18,7 @@
   }
   
   .mat-list-item.active { 
-  color: #2A8Bf2; 
+  color: #1a7a72; 
   font-family: Roboto, "Helvetica Neue", sans-serif;
   
   }
@@ -190,7 +190,7 @@
   font-size: 0.7em;
 }
 
-.sender{
+.remetente{
   display: block;
   color: #222;
   font-weight: bold;
@@ -227,4 +227,19 @@
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 18px;
   text-align: center;
+}
+
+.logoContent{
+  z-index: 10004;
+  top: -34px;
+  left: 42.5%;
+  position: absolute;
+  width: 15%;
+  background-color: white;
+  border-radius: 20px;
+  padding: 20px;
+  padding-bottom: 20px;
+  padding-bottom: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding-bottom: 0px;
 }

@@ -11,14 +11,14 @@ import { MatSnackBar } from '@angular/material';
 })
 export class AuthService {
 
-  userData: any; // Save logged in user data
+  userData: any; 
 
   constructor(
     public snackBar: MatSnackBar,
-    public afs: AngularFirestore,   // Inject Firestore service
-    public afAuth: AngularFireAuth, // Inject Firebase auth service
+    public afs: AngularFirestore,   
+    public afAuth: AngularFireAuth, 
     public router: Router,
-    public ngZone: NgZone // NgZone service to remove outside scope warning
+    public ngZone: NgZone 
   ) { 
     this.afAuth.authState.subscribe(user => {
       if (user) {
@@ -32,18 +32,18 @@ export class AuthService {
     })
   }
 
-  // Sign in with email/password
+
   SignIn(email, password) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((result) => {
         this.ngZone.run(() => {
           this.router.navigate(['home']);
         });
-        // this.SetUserData(result.user);
+        
       }).catch((error) => {
         let message = error.message
         //Convertendo Valores do Firebase
-        if(error.message == 'The email address is badly formatted.')
+        if(error.message == 'The email endereco is badly formatted.')
         {
           message = 'O endereço de e-mail está incorreto.'
         }
@@ -55,7 +55,7 @@ export class AuthService {
       })
   }
 
-  // Auth logic to run auth providers
+
   AuthLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((result) => {
@@ -68,24 +68,21 @@ export class AuthService {
       })
   }
 
-  /* Setting up user data when sign in with username/password, 
-  sign up with username/password and sign in with social auth  
-  provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetUserData(user) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`usuario/${user.uid}`);
     const userData: User = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
-      firstName: null,
-      lastName: null,
-      dateofbirth: null,
-      address: null,
-      insurancecompany: null,
-      insuranceid: null,
-      isDoctor: false
+      primeiroNome: null,
+      sobrenome: null,
+      dataAniversario: null,
+      endereco: null,
+      planodesaude: null,
+      planodesaudeid: null,
+      isMedico: false
     }
     return userRef.set(userData, {
       merge: true
@@ -93,7 +90,7 @@ export class AuthService {
   }
 
   // Sign up with email/password
-  SignUp(email, password) {
+  Sair(email, password) {
     const hasNumbers = /\d/.test(password)
     if(password.length < 8 || !hasNumbers)
     {
